@@ -6,5 +6,13 @@
     "genero": "Masvida",
     "formato": "Pdf",
     "anio": 2001
+  },
+  {
+    "id": 2,
+    "titulo": "Lobos",
+    "autor": "Jean",
+    "genero": "Drama",
+    "formato": "PDF",
+    "anio": 1889
   }
 ]
