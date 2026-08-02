@@ -213,18 +213,26 @@ func menuReportes() {
 			fmt.Printf("Total descargas:  %d\n", r.TotalDescargas)
 		case "2":
 			n := leerInt("Cuantos libros mostrar: ")
-			top := reportes.LibrosMasDescargados(n)
-			for i, lc := range top {
-				fmt.Printf("%d. %s - %d descargas\n", i+1, lc.Libro.Titulo, lc.Descargas)
+			top, err := reportes.LibrosMasDescargados(n)
+			if err != nil {
+				fmt.Println("Error:", err)
+			} else {
+				for i, lc := range top {
+					fmt.Printf("%d. %s - %d descargas\n", i+1, lc.Libro.Titulo, lc.Descargas)
+				}
 			}
 		case "3":
 			dias := leerInt("Activos en los ultimos cuantos dias: ")
-			activos := reportes.UsuariosActivos(dias)
-			if len(activos) == 0 {
-				fmt.Println("No hay usuarios activos en ese periodo.")
-			}
-			for _, u := range activos {
-				fmt.Printf("[%d] %s - %s\n", u.ID, u.Nombre, u.Email)
+			activos, err := reportes.UsuariosActivos(dias)
+			if err != nil {
+				fmt.Println("Error:", err)
+			} else {
+				if len(activos) == 0 {
+					fmt.Println("No hay usuarios activos en ese periodo.")
+				}
+				for _, u := range activos {
+					fmt.Printf("[%d] %s - %s\n", u.ID, u.Nombre, u.Email)
+				}
 			}
 		case "0":
 			return

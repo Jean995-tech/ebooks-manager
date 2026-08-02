@@ -3,10 +3,12 @@ package gestion_libros
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 )
 
+// Libro representa un libro electronico en el catalogo del sistema
 type Libro struct {
 	ID      int    `json:"id"`
 	Titulo  string `json:"titulo"`
@@ -16,30 +18,47 @@ type Libro struct {
 	Anio    int    `json:"anio"`
 }
 
+// archivoLibros es la ruta donde se persiste el catalogo en formato JSON
 const archivoLibros = "data/libros.json"
 
+// CargarLibros lee el catalogo de libros desde el archivo JSON.
+// Si el archivo no existe retorna una lista vacia sin error.
 func CargarLibros() ([]Libro, error) {
 	datos, err := os.ReadFile(archivoLibros)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return []Libro{}, nil
 		}
-		return nil, err
+		return nil, fmt.Errorf("error al leer el archivo de libros: %w", err)
 	}
 	var libros []Libro
-	err = json.Unmarshal(datos, &libros)
-	return libros, err
+	if err := json.Unmarshal(datos, &libros); err != nil {
+		return nil, fmt.Errorf("error al parsear el archivo de libros: %w", err)
+	}
+	return libros, nil
 }
 
+// GuardarLibros persiste la lista de libros en el archivo JSON.
 func GuardarLibros(libros []Libro) error {
 	datos, err := json.MarshalIndent(libros, "", "  ")
 	if err != nil {
-		return err
+		return fmt.Errorf("error al serializar los libros: %w", err)
 	}
-	return os.WriteFile(archivoLibros, datos, 0644)
+	if err := os.WriteFile(archivoLibros, datos, 0644); err != nil {
+		return fmt.Errorf("error al guardar el archivo de libros: %w", err)
+	}
+	return nil
 }
 
+// AgregarLibro agrega un nuevo libro al catalogo validando que los
+// campos obligatorios no esten vacios antes de persistir.
 func AgregarLibro(titulo, autor, genero, formato string, anio int) error {
+	if titulo == "" || autor == "" {
+		return errors.New("el titulo y el autor son campos obligatorios")
+	}
+	if anio < 1000 || anio > 2100 {
+		return errors.New("el anio debe estar entre 1000 y 2100")
+	}
 	libros, err := CargarLibros()
 	if err != nil {
 		return err
@@ -60,7 +79,12 @@ func AgregarLibro(titulo, autor, genero, formato string, anio int) error {
 	return GuardarLibros(libros)
 }
 
+// BuscarLibro busca libros por titulo o autor usando coincidencia parcial
+// sin distinguir entre mayusculas y minusculas.
 func BuscarLibro(query string) []Libro {
+	if query == "" {
+		return []Libro{}
+	}
 	libros, err := CargarLibros()
 	if err != nil {
 		return []Libro{}
@@ -76,6 +100,7 @@ func BuscarLibro(query string) []Libro {
 	return resultados
 }
 
+// ListarLibros retorna todos los libros del catalogo ordenados por ID.
 func ListarLibros() []Libro {
 	libros, err := CargarLibros()
 	if err != nil {
@@ -84,7 +109,12 @@ func ListarLibros() []Libro {
 	return libros
 }
 
+// EliminarLibro elimina un libro del catalogo por su ID.
+// Retorna error si el ID no existe en el catalogo.
 func EliminarLibro(id int) error {
+	if id <= 0 {
+		return errors.New("el ID debe ser un numero positivo")
+	}
 	libros, err := CargarLibros()
 	if err != nil {
 		return err
@@ -95,5 +125,5 @@ func EliminarLibro(id int) error {
 			return GuardarLibros(libros)
 		}
 	}
-	return errors.New("libro no encontrado")
+	return fmt.Errorf("no se encontro ningun libro con ID %d", id)
 }

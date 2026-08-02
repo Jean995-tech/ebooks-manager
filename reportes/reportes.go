@@ -1,6 +1,7 @@
 package reportes
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 	"time"
@@ -10,17 +11,21 @@ import (
 	"github.com/Jean995-tech/ebooks-manager/gestion_usuarios"
 )
 
+// LibroConteo agrupa un libro con su cantidad total de descargas
 type LibroConteo struct {
 	Libro     gestion_libros.Libro
 	Descargas int
 }
 
+// Resumen contiene los totales generales del sistema
 type Resumen struct {
 	TotalLibros    int
 	TotalUsuarios  int
 	TotalDescargas int
 }
 
+// ResumenGeneral retorna un resumen con los totales actuales del sistema:
+// cantidad de libros, usuarios registrados y descargas realizadas.
 func ResumenGeneral() Resumen {
 	libros := gestion_libros.ListarLibros()
 	usuarios := gestion_usuarios.ListarUsuarios()
@@ -32,15 +37,22 @@ func ResumenGeneral() Resumen {
 	}
 }
 
-func LibrosMasDescargados(n int) []LibroConteo {
+// LibrosMasDescargados retorna los n libros con mayor numero de descargas,
+// ordenados de mayor a menor. Si n es mayor al total de libros, retorna todos.
+func LibrosMasDescargados(n int) ([]LibroConteo, error) {
+	if n <= 0 {
+		return nil, fmt.Errorf("el numero de libros debe ser mayor a 0")
+	}
 	libros := gestion_libros.ListarLibros()
 	descargas, _ := gestion_descargas.CargarDescargas()
 
+	// Contar descargas por libro usando un mapa ID -> cantidad
 	conteo := make(map[int]int)
 	for _, d := range descargas {
 		conteo[d.LibroID]++
 	}
 
+	// Construir la lista de libros con su conteo
 	var resultado []LibroConteo
 	for _, l := range libros {
 		resultado = append(resultado, LibroConteo{
@@ -49,6 +61,7 @@ func LibrosMasDescargados(n int) []LibroConteo {
 		})
 	}
 
+	// Ordenar de mayor a menor cantidad de descargas
 	sort.Slice(resultado, func(i, j int) bool {
 		return resultado[i].Descargas > resultado[j].Descargas
 	})
@@ -56,13 +69,19 @@ func LibrosMasDescargados(n int) []LibroConteo {
 	if n > len(resultado) {
 		n = len(resultado)
 	}
-	return resultado[:n]
+	return resultado[:n], nil
 }
 
-func UsuariosActivos(dias int) []gestion_usuarios.Usuario {
+// UsuariosActivos retorna los usuarios que han realizado al menos una
+// descarga en los ultimos n dias.
+func UsuariosActivos(dias int) ([]gestion_usuarios.Usuario, error) {
+	if dias <= 0 {
+		return nil, fmt.Errorf("el numero de dias debe ser mayor a 0")
+	}
 	usuarios := gestion_usuarios.ListarUsuarios()
 	descargas, _ := gestion_descargas.CargarDescargas()
 
+	// Calcular la fecha limite para considerar un usuario como activo
 	activos := make(map[int]bool)
 	limite := time.Now().AddDate(0, 0, -dias).Format("2006-01-02")
 
@@ -73,11 +92,12 @@ func UsuariosActivos(dias int) []gestion_usuarios.Usuario {
 		}
 	}
 
+	// Filtrar solo los usuarios que aparecen en el mapa de activos
 	var resultado []gestion_usuarios.Usuario
 	for _, u := range usuarios {
 		if activos[u.ID] {
 			resultado = append(resultado, u)
 		}
 	}
-	return resultado
+	return resultado, nil
 }
