@@ -37,6 +37,7 @@ func main() {
 		fmt.Println("2. Gestion de Usuarios")
 		fmt.Println("3. Gestion de Descargas")
 		fmt.Println("4. Reportes")
+		fmt.Println("5. Iniciar Servidor Web")
 		fmt.Println("0. Salir")
 		fmt.Println("----------------------------------------")
 
@@ -51,6 +52,8 @@ func main() {
 			menuDescargas()
 		case "4":
 			menuReportes()
+		case "5":
+			iniciarServidor()
 		case "0":
 			fmt.Println("Hasta luego!")
 			return

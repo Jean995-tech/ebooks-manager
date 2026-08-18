@@ -4,5 +4,23 @@
     "usuario_id": 1,
     "libro_id": 1,
     "fecha_hora": "2026-07-30 20:21:23"
+  },
+  {
+    "id": 2,
+    "usuario_id": 1,
+    "libro_id": 1,
+    "fecha_hora": "2026-08-09 14:42:28"
+  },
+  {
+    "id": 3,
+    "usuario_id": 2,
+    "libro_id": 1,
+    "fecha_hora": "2026-08-09 14:42:36"
+  },
+  {
+    "id": 4,
+    "usuario_id": 1,
+    "libro_id": 2,
+    "fecha_hora": "2026-08-09 14:42:46"
   }
 ]

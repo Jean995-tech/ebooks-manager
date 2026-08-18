@@ -6,5 +6,37 @@
     "genero": "Aventura",
     "formato": "PDF",
     "anio": 2001
+  },
+  {
+    "id": 2,
+    "titulo": "La vida de jean",
+    "autor": "Jean",
+    "genero": "Misterio",
+    "formato": "PDF",
+    "anio": 2001
+  },
+  {
+    "id": 3,
+    "titulo": "Harry Potter y la Piedra Filosofal",
+    "autor": "J.K. Rowling",
+    "genero": "Fantasia",
+    "formato": "PDF",
+    "anio": 1997
+  },
+  {
+    "id": 4,
+    "titulo": "Clean Code",
+    "autor": "Robert Martin",
+    "genero": "Tecnologia",
+    "formato": "PDF",
+    "anio": 2008
+  },
+  {
+    "id": 5,
+    "titulo": "Clases UIDE",
+    "autor": "Jean",
+    "genero": "Cientifico",
+    "formato": "PDF",
+    "anio": 2026
   }
 ]

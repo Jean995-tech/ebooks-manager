@@ -4,5 +4,17 @@
     "nombre": "Bryan",
     "email": "bryan@uide.com",
     "fecha_registro": "2026-07-30"
+  },
+  {
+    "id": 2,
+    "nombre": "Jean Males",
+    "email": "jean@gmail.com",
+    "fecha_registro": "2026-08-09"
+  },
+  {
+    "id": 3,
+    "nombre": "bryan@hotmail.com",
+    "email": "bryan@hotmail.com",
+    "fecha_registro": "2026-08-09"
   }
 ]
