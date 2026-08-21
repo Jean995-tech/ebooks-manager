@@ -2,7 +2,7 @@
 
 # 📚 ebooks-manager
 
-![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+![Go](https://img.shields.io/badge/Go-1.26-00ADD8?style=for-the-badge&logo=go&logoColor=white)
 ![License](https://img.shields.io/badge/Licencia-Académica-blue?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Estado-Completo-green?style=for-the-badge)
 ![UIDE](https://img.shields.io/badge/UIDE-Ciberseguridad-8B0000?style=for-the-badge)
@@ -40,7 +40,8 @@ Administra una biblioteca digital desde la consola y a través de una API REST. 
 - Encapsulación documentada
 
 ### ✅ Proyecto Final — Servicios Web REST
-- 8 endpoints REST implementados
+- 11 endpoints REST implementados
+- Página de bienvenida en la ruta raíz (`/`)
 - Serialización JSON en todas las respuestas
 - Servidor web en puerto 8080
 - Compatible con cualquier cliente HTTP
@@ -56,7 +57,7 @@ Administra una biblioteca digital desde la consola y a través de una API REST. 
  ┣ ⬇️  gestion_descargas → Historial con límite diario por usuario
  ┣ 📊 reportes           → Estadísticas y resúmenes del sistema
  ┣ 🔌 interfaces         → Contratos de cada módulo
- ┗ 🌐 server             → API REST con 8 servicios web
+ ┗ 🌐 server             → API REST con 11 servicios web
 ```
 
 ---
@@ -66,7 +67,7 @@ Administra una biblioteca digital desde la consola y a través de una API REST. 
 ```
 ebooks-manager/
 ├── main.go                      # Punto de entrada y menú principal
-├── server.go                    # Servidor web con 8 servicios REST
+├── server.go                    # Servidor web con 11 servicios REST
 ├── go.mod                       # Configuración del módulo Go
 ├── README.md
 ├── data/
@@ -87,10 +88,11 @@ ebooks-manager/
 
 ---
 
-## 🌐 API REST — 8 Servicios Web
+## 🌐 API REST — 11 Servicios Web
 
 | # | Método | Endpoint | Descripción |
 |---|---|---|---|
+| — | GET | `/` | Página de bienvenida con la lista de servicios |
 | 1 | GET | `/libros` | Listar todos los libros |
 | 2 | POST | `/libros` | Agregar un libro nuevo |
 | 3 | DELETE | `/libros?id=1` | Eliminar un libro por ID |
@@ -99,6 +101,9 @@ ebooks-manager/
 | 6 | POST | `/usuarios` | Registrar un usuario nuevo |
 | 7 | POST | `/descargas` | Registrar una descarga |
 | 8 | GET | `/descargas/historial?usuario_id=1` | Ver historial de descargas |
+| 9 | GET | `/descargas/limite?usuario_id=1` | Verificar límite diario de descargas |
+| 10 | GET | `/reportes/resumen` | Resumen general del sistema |
+| 11 | GET | `/reportes/top?n=5` | Libros más descargados |
 
 ### Ejemplos de respuesta JSON:
 
@@ -125,11 +130,18 @@ ebooks-manager/
 }
 ```
 
+**GET /descargas/limite?usuario_id=1:**
+```json
+{
+  "puede_descargar": true
+}
+```
+
 ---
 
 ## ⚙️ Requisitos
 
-- Go 1.21 o superior → [descargar Go](https://go.dev/dl/)
+- Go 1.26 o superior → [descargar Go](https://go.dev/dl/)
 - Git → [descargar Git](https://git-scm.com/download/win)
 - Sin dependencias externas
 
@@ -154,6 +166,8 @@ Selecciona la opcion 5 en el menu principal
 Servidor corriendo en http://localhost:8080
 ```
 
+Al abrir `http://localhost:8080/` en el navegador se muestra una página de bienvenida con la lista completa de servicios disponibles.
+
 ---
 
 ## ✅ Funcionalidades
@@ -164,7 +178,7 @@ Servidor corriendo en http://localhost:8080
 | 👤 Usuarios | Registrar con validación de email, buscar, listar |
 | ⬇️ Descargas | Registrar, ver historial, verificar límite diario |
 | 📊 Reportes | Libros más descargados, usuarios activos, resumen |
-| 🌐 API REST | 8 endpoints con serialización JSON |
+| 🌐 API REST | 11 endpoints con serialización JSON y página de bienvenida |
 
 ---
 
